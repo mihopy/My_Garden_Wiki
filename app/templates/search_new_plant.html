@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Garden Wiki{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid px-0 mt-2">
+  <div class="row">
+    <div class="col-auto">
+      <form method="POST" action="{{ url_for('main.select_new_plant') }}" class="d-flex" role="search">
+        <input class="form-control me-2" type="search" name="new_plant_name" placeholder="Search for New Plants..." aria-label="Search" required>
+        <button class="btn btn-outline-success" type="submit">🔍</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

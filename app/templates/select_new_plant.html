@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Garden Wiki{% endblock %}
+
+{% block content %}
+    <ul>
+        {% for plant in new_plants %}
+        <form method="POST" action="{{ url_for('main.add_plant', plant_id=plant.id) }}">
+        <li>
+        <button type="submit" style="all: unset; cursor: pointer; width: 100%;">
+                <strong>{{ plant.common_name }}</strong><br>
+                <img src="{{ plant.default_image.small_url }}" alt="{{ plant.common_name }}" width="150">
+                <div class="plant-info">
+                    <p><span class="label">Scientific Name:</span> {{ plant.scientific_name }}</p>
+                </div>
+            </button>
+        </li>
+        </form>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
