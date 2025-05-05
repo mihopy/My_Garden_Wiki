@@ -6,16 +6,21 @@
     <h2>Autumn Plants</h2>
     <ul>
         {% for plant in saved_plants %}
-            <li><strong>{{ plant.common_name }}</strong><br>
-                <img src="{{ plant.plant_image }}" alt="{{ plant.common_name }}" width="150">
-                <div class="plant-info">
-                    <p><span class="label">Scientific Name:</span> {{ plant.scientific_name }}</p>
-                    <p><span class="label">Pruning :</span> {{ plant.pruning_count }} time(s)</p>
-                    <p><span class="label">Pruning month:</span> {{ plant.pruning_month }}</p>
-                    <p><span class="label">Flowering Season:</span> {{ plant.flowering_season }}</p>
-                    <p><span class="label">Cycle:</span> {{ plant.cycle }}</p>
-                </div>
-            </li>
+        <li>
+            <form action="{{ url_for('main.delete_plant', plant_id=plant.id) }}" method="POST"
+              onsubmit="return confirm('Are you sure you want to delete {{ plant.common_name }}?');">
+                <button type="submit" class="delete-button">🗑️</button>
+            </form>
+            <strong>{{ plant.common_name }}</strong><br>
+            <img src="{{ plant.plant_image }}" alt="{{ plant.common_name }}" width="150">
+            <div class="plant-info">
+                <p><span class="label">Scientific Name:</span> {{ plant.scientific_name }}</p>
+                <p><span class="label">Pruning :</span> {{ plant.pruning_count }} time(s)</p>
+                <p><span class="label">Pruning month:</span> {{ plant.pruning_month }}</p>
+                <p><span class="label">Flowering Season:</span> {{ plant.flowering_season }}</p>
+                <p><span class="label">Cycle:</span> {{ plant.cycle }}</p>
+            </div>
+        </li>
         {% endfor %}
     </ul>
 {% endblock %}

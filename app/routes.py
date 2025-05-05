@@ -91,6 +91,14 @@ def add_plant(plant_id):
     return "Plant Not Found", 404
 
 
+@main.route("/delete/<int:plant_id>", methods=['POST'])
+def delete_plant(plant_id):
+    plant_to_delete = db.get_or_404(Plant, plant_id)
+    db.session.delete(plant_to_delete)
+    db.session.commit()
+    return redirect(url_for('main.index'))
+
+
 @main.route("/saved_plants")
 def show_saved_plants():
     plants = Plant.query.all()  # Fetch all data from DB
