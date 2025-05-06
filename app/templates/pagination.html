@@ -1,0 +1,16 @@
+{% macro render_pagination(pagination, endpoint) %}
+<div style="text-align: center; margin-top: 20px;">
+    {% if pagination.has_prev %}
+        <a href="{{ url_for(endpoint, page=pagination.prev_num) }}" class="btn btn-light">Previous</a>
+    {% endif %}
+    {% if pagination.has_next %}
+        <a href="{{ url_for(endpoint, page=pagination.next_num) }}" class="btn btn-light">View More</a>
+    {% endif %}
+
+    {% if pagination.pages > 0 %}
+        <p>-- Page {{ pagination.page }} of {{ pagination.pages }} --</p>
+    {% else %}
+        <p> No Plants Found </p>
+    {% endif %}
+</div>
+{% endmacro %}

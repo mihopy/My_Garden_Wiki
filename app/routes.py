@@ -19,20 +19,17 @@ main = Blueprint('main', __name__)
 
 @main.route("/", methods=["GET", "POST"])
 def index():
+    page = request.args.get('page', 1, type=int)
+    per_page = 8
+
     if request.method == "POST":
         query = request.form.get("query")
-        plants = Plant.query.filter(Plant.common_name.ilike(f"%{query}%")).all()
-        if not plants:
+        plants = Plant.query.filter(Plant.common_name.ilike(f"%{query}%")).paginate(page=page, per_page=per_page)
+        if not plants.items:
             return "Plant Not Found", 404
         return render_template("index.html", saved_plants=plants)
 
-    #     url = f"{API_URL}?key={PLANT_API_KEY}&q={urllib.parse.quote(query)}"
-    #     response = requests.get(url)
-    #     pprint.pprint(response.status_code)
-    #     if response.status_code == 200:
-    #         plants = response.json().get('data', [])
-    #         pprint.pprint(response.json())
-    plants_data = Plant.query.all()
+    plants_data = Plant.query.paginate(page=page, per_page=per_page)
     return render_template("index.html", saved_plants=plants_data)
 
 
@@ -62,9 +59,14 @@ def select_new_plant():
 
 @main.route("/add/<int:plant_id>", methods=["GET", "POST"])
 def add_plant(plant_id):
+    page = request.args.get('page', 1, type=int)
+    per_page = 8
+
     existing_plant = Plant.query.get(plant_id)
     if existing_plant:
-        return render_template("index.html", saved_plants=[existing_plant])
+        # Simulate a paginated object with a single item
+        pagination = Plant.query.filter(Plant.id == plant_id).paginate(page=page, per_page=per_page)
+        return render_template("index.html", saved_plants=pagination)
 
     plant_details_url = f"https://perenual.com/api/v2/species/details/{plant_id}?key={PLANT_API_KEY}"
     response = requests.get(plant_details_url)
@@ -86,7 +88,9 @@ def add_plant(plant_id):
         )
         db.session.add(new_plant)
         db.session.commit()
-        return render_template('index.html', saved_plants=[new_plant])
+        # Get the updated pagination after adding
+        pagination = Plant.query.paginate(page=page, per_page=per_page)
+        return render_template('index.html', saved_plants=pagination)
 
     return "Plant Not Found", 404
 
@@ -107,27 +111,35 @@ def show_saved_plants():
 
 @main.route('/spring')
 def spring():
-    plants = Plant.query.all()
-    spring_plants = [plant for plant in plants if plant.flowering_season == 'Spring']
+    page = request.args.get('page', 1, type=int)
+    per_page = 8
+    spring_query = Plant.query.filter(Plant.flowering_season == 'Spring')
+    spring_plants = spring_query.paginate(page=page, per_page=per_page)
     return render_template('spring.html', saved_plants=spring_plants)
 
 
 @main.route('/summer')
 def summer():
-    plants = Plant.query.all()
-    summer_plants = [plant for plant in plants if plant.flowering_season == 'Summer']
+    page = request.args.get('page', 1, type=int)
+    per_page = 8
+    summer_query = Plant.query.filter(Plant.flowering_season == 'Summer')
+    summer_plants = summer_query.paginate(page=page, per_page=per_page)
     return render_template('summer.html', saved_plants=summer_plants)
 
 
 @main.route('/autumn')
 def autumn():
-    plants = Plant.query.all()
-    autumn_plants = [plant for plant in plants if plant.flowering_season == 'Autumn']
+    page = request.args.get('page', 1, type=int)
+    per_page = 8
+    autumn_query = Plant.query.filter(Plant.flowering_season == 'Autumn')
+    autumn_plants = autumn_query.paginate(page=page, per_page=per_page)
     return render_template('autumn.html', saved_plants=autumn_plants)
 
 
 @main.route('/winter')
 def winter():
-    plants = Plant.query.all()
-    winter_plants = [plant for plant in plants if plant.flowering_season == 'Winter']
+    page = request.args.get('page', 1, type=int)
+    per_page = 8
+    winter_query = Plant.query.filter(Plant.flowering_season == 'Winter')
+    winter_plants = winter_query.paginate(page=page, per_page=per_page)
     return render_template('winter.html', saved_plants=winter_plants)

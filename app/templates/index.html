@@ -1,3 +1,5 @@
+{% from "pagination.html" import render_pagination %}
+
 {% extends 'base.html' %}
 
 {% block title %}Home - Garden Wiki{% endblock %}
@@ -5,7 +7,7 @@
 {% block content %}
 
     <ul>
-        {% for plant in saved_plants %}
+        {% for plant in saved_plants.items %}
         <li>
             <form action="{{ url_for('main.delete_plant', plant_id=plant.id) }}" method="POST"
               onsubmit="return confirm('Are you sure you want to delete {{ plant.common_name }}?');">
@@ -25,5 +27,8 @@
         </li>
         {% endfor %}
     </ul>
+    {{ render_pagination(saved_plants, 'main.index') }}
+
 {% endblock %}
+
 

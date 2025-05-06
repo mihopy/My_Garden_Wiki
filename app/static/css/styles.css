@@ -16,7 +16,7 @@ ul {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
-  padding: 0;
+  padding: 0 !important;
   list-style: none;
   margin: 0 auto;
   max-width: 1400px;
@@ -110,3 +110,9 @@ p strong {
 .delete-button:hover {
     background-color: #CA9CAC;
 }
+
+/*
+.btn-custom {
+    background-color: #CCC2C0;
+    border-color: #CCC2C0;
+}*/
